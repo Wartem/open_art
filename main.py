@@ -46,7 +46,7 @@ def menu():
             case "1":
                 nga.download_zip_if_needed()
             case "2":
-                nga.unpack_and_recreate_db()
+                nga.unpack_and_create_csv()
             case "3":
                 sql_injection_menu()
             case "4":

@@ -1,4 +1,4 @@
-import datetime
+''' import datetime
 import shutil
 from zipfile import ZipFile
 import wget
@@ -185,3 +185,4 @@ def download_zip(data_url, art_folder, download_folder):
 
 if __name__ == "__main__":
     print("No main. Call functions instead.")
+'''

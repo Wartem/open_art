@@ -74,7 +74,7 @@ class Constants:
     NGA_DOWNLOAD_STARTS_WITH = "opendata-main/data/"
     NGA_FOLDER_TO_RENAME = "opendata-main"
     NGA_FOLDER_RENAME_TO = NGA_CSV_DIR + "nga"
-    NGA_CSV_CONTAINER = NGA_FOLDER_RENAME_TO + "\\data"
+    NGA_CSV_CONTAINER  = NGA_FOLDER_RENAME_TO + "\\data"
     NGA_ZIP_FILE_PATH = DOWNLOAD_FOLDER + NGA_ZIP_FILE_NAME
 
 

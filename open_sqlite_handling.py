@@ -3,10 +3,11 @@ import pandas as pd
 from a_constants import *
 
 
+
 def sqlite_creation_fill(db_file):
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
-    create_table = '''CREATE TABLE IF NOT EXISTS objects(
+    create_table = ''' CREATE TABLE IF NOT EXISTS objects(
             source TEXT NOT NULL,
             objectid TEXT NOT NULL, \
             title TEXT NOT NULL, \
@@ -15,11 +16,12 @@ def sqlite_creation_fill(db_file):
             endyear INTEGER, \
             displaydate INTEGER, \
             classification TEXT NOT NULL, \
-            medium TEXT,
+            medium TEXT, \
             width INTEGER NOT NULL, \
             height INTEGER NOT NULL, \
-            iiifurl TEXT NOT NULL PRIMARY KEY)
-            '''
+            imgurl_thumb TEXT NOT NULL, \
+            imgurl_downsized TEXT NOT NULL, \
+            imgurl_full TEXT NOT NULL PRIMARY KEY); '''
 
     cursor.execute(create_table)
     conn.commit()

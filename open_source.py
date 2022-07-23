@@ -8,5 +8,5 @@ class Source(ABC):
         pass
 
     @abstractmethod
-    def unpack_and_recreate_db(self):
+    def unpack_and_create_csv(self):
         pass

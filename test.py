@@ -1,5 +1,0 @@
-from open_sqlite_handling import remove_old_and_create_new_sqlite_db
-from a_constants import Constants
-
-print(Constants.SQLite_OPEN_ART_DB_FILE_NAME)
-remove_old_and_create_new_sqlite_db()

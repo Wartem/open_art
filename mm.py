@@ -17,6 +17,9 @@ cookies = {
 }
 
 class MM(Source):
+    '''
+    The Metropolitan Museum of Art open data source handler.
+    '''
     
     def __init__(self):
         self.source_org_file_name = "MetObjects.csv"

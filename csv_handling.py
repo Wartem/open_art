@@ -11,7 +11,7 @@ csv_file_names = []
 
 def init():
     global root_dir_folders
-    root_dir_folders = os.listdir(Const.NGA_CSV_DIR)
+    root_dir_folders = os.listdir(Const.NGA_open_data_art)
     print_folder_names()
     # csv_files = glob.glob(os.path.join(path, "*.csv"))
 
@@ -31,7 +31,7 @@ def print_file_names():
 def set_csv_folder(user_dir):
     # path = os.getcwd()
     global csv_directory_in_use
-    csv_directory_in_use = Const.NGA_CSV_DIR + user_dir + "\\data\\"
+    csv_directory_in_use = Const.NGA_open_data_art + user_dir + "\\data\\"
     global csv_file_names
     csv_file_names = glob.glob(os.path.join(csv_directory_in_use, "*.csv"))
 
@@ -59,6 +59,22 @@ def type_file_name():
 
     return ""
 
+    """  
+        def _investigate_menu(self):
+        user_input = input("Type the name of the column to use\n")
+        while True:
+            print("\n")
+            pprint("Investigation menu")
+            print("Type feature corresponding number:")
+            print("1. Print general info about a file.")
+            print("2. Print all rows in a column.")
+            print("3. Choose another file in use.")
+            print("4. Back to main menu")
+            match input("Type a input number from above\n"):
+                case "1":
+                    self.print_all_file_names()
+                case "2":
+                    self.investigate() """
 
 def investigate():
     file_to_use = type_file_name()

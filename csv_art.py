@@ -109,22 +109,7 @@ class Art_csv:
         print("")
         print("".join(sorted(dirty)))
         pprint("-------------------------")
-
-        """     def _investigate_menu(self):
-        user_input = input("Type the name of the column to use\n")
-        while True:
-            print("\n")
-            pprint("Investigation menu")
-            print("Type feature corresponding number:")
-            print("1. Print general info about a file.")
-            print("2. Print all rows in a column.")
-            print("3. Choose another file in use.")
-            print("4. Back to main menu")
-            match input("Type a input number from above\n"):
-                case "1":
-                    self.print_all_file_names()
-                case "2":
-                    self.investigate() """
+        
 
     if __name__ == '__main__':
         print("Not standalone")

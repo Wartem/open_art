@@ -13,7 +13,7 @@ def print_constants():
     print("DOWNLOAD_FOLDER", Constants.DOWNLOAD_FOLDER)
 
     # NGA
-    print("NGA_CSV_DIR", Constants.NGA_CSV_DIR)
+    print("NGA_CSV_DIR", Constants.NGA_open_data_art)
 
     print("NGA_ART_DATA_ZIP", Constants.NGA_REMOTE_DATA_ZIP)
     print("NGA_ZIP_FILE", Constants.NGA_ZIP_FILE_NAME)
@@ -65,7 +65,7 @@ class Constants:
 
     FILES_USED = ["objects.csv", "published_images.csv"]
 
-    NGA_CSV_DIR = PARENT_PATH + "\\" + APP_NAME.lower() + "\\" + "open_data_art\\"
+    NGA_open_data_art = PARENT_PATH + "\\" + APP_NAME.lower() + "\\" + "open_data_art\\"
 
     NGA_REMOTE_DATA_ZIP = (
         "https://github.com/NationalGalleryOfArt/opendata/archive/refs/heads/main.zip"
@@ -73,8 +73,8 @@ class Constants:
     NGA_ZIP_FILE_NAME = "opendata-main.zip"
     NGA_DOWNLOAD_STARTS_WITH = "opendata-main/data/"
     NGA_FOLDER_TO_RENAME = "opendata-main"
-    NGA_FOLDER_RENAME_TO = NGA_CSV_DIR + "nga"
-    NGA_CSV_CONTAINER  = NGA_FOLDER_RENAME_TO + "\\data"
+    NGA_FOLDER_RENAME_TO = NGA_open_data_art + "nga"
+    NGA_CSV_CONTAINER  = NGA_FOLDER_RENAME_TO + "\\opendata-main\\data" # used to be only \\data
     NGA_ZIP_FILE_PATH = DOWNLOAD_FOLDER + NGA_ZIP_FILE_NAME
 
 

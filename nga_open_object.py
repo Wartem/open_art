@@ -1,6 +1,3 @@
-
-
-
 class Object:
 
     def __init__(self, source, objectid, title,
@@ -44,38 +41,3 @@ class Object:
         else:
             self.imgurl_downsized = self.iiifurl + "/full/!" + self.width + "," + self.height + "/0/default.jpg"
             self.imgurl_thumb = self.iiifurl + "/full/!200,200/0/default.jpg"
-            
-        
-"""         def addImageUrls(df):
-         
-        for index, row in df.iterrows():
-            print(row["iiifurl"][index])
-         
-
-        if(row["width"][index] > 4096 or row["height"][index] > 4096):
-
-            if (row["width"][index] > 4096):
-                row["width"][index] = 4096
-            
-
-            if (row["height"][index] > 4096):
-                row["height"][index] = 4096
-            
-
-            imgurl_full = Iiifurl + "/full/!" + row["width"][index] + "," + row["height"][index] + "/0/default.jpg"
-        
-        else:
-            imgurl_full = Iiifurl + "/full/" + row["width"][index] + "," + row["height"][index] + "/0/default.jpg"
-        
-
-        if (row["height"][index] > 1500 or row["width"][index] > 1500):
-            imgurl_fulldownsized = Iiifurl + "/full/!" + 1500 + "," + 1500 + "/0/default.jpg"
-        
-        else:
-            imgurl_fulldownsized = Iiifurl + "/full/!" + row["width"][index] + "," + row["height"][index] + "/0/default.jpg"
-        
-
-
-        imgurl_fullthumb = Iiifurl + "/full/!200,200/0/default.jpg"
-        
-        return df """

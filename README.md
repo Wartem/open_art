@@ -10,6 +10,7 @@
  Open Art Viewer. https://wartem.se/files/OpenArtViewer.zip (sqlite file is already included).
  
  Metropolitan museum of art.
+ 
  Code used when adding painting urls from their website to complement their open data.
  This data is included in above mentioned program.
  

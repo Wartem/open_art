@@ -32,8 +32,6 @@ class MM(Source):
         # self.extract_zip_and_fix()
         
     def get_url_from_url_selenium(self, page_url: str):
-        #time.sleep(0.1)
-        #print(page_url)
         
         options = webdriver.ChromeOptions()
         options.binary_location = "C:\Program Files\Google\Chrome Beta\Application\chrome.exe"
@@ -153,14 +151,7 @@ class MM(Source):
             obj["imgurl_full"] = img_
             
             obj_list.append(obj)
-            #print("index", ind)
-            
-            #print(obj["title"] )
-            
-            
-            
-            #get_image_url_from_row(df, ind)
-            
+    
             df_save = pd.DataFrame(obj_list)
             if old_df.empty:
                 df_save.to_csv(self.csv_file_name, index=False, encoding='utf-8')
@@ -168,12 +159,6 @@ class MM(Source):
                 df_save.to_csv(self.csv_file_name, mode='a', header=False, index=False, encoding='utf-8')
             if times % 10 == 0:
                 pass
-                #df = pd.DataFrame(obj_list)
-                #df.to_csv(self.csv_file_name, index=False, encoding='utf-8')
-            
-        # df = pd.DataFrame(obj_list)
-        # df.to_csv(self.csv_file_name, index=False, encoding='utf-8')
-        #df.to_csv("Classification.csv", encoding='utf-8', on_bad_lines='skip')
 
 
 if __name__ == '__main__':

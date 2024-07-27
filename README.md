@@ -1,5 +1,5 @@
 ## OpenArt
- # Making open art data ready to use.
+ ### Making open art data ready to use.
  
  Currently supported:
  

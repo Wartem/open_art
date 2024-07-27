@@ -1,5 +1,5 @@
-# OpenArt
- Making open art data ready to use.
+## OpenArt
+ # Making open art data ready to use.
  
  Currently supported:
  
@@ -13,5 +13,8 @@
  
  Code used when adding painting urls from their website to complement their open data.
  This data is included in above mentioned program.
+
+## Example of usage
+ https://sites.google.com/view/wartem/art-viewer
  
  

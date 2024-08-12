@@ -19,5 +19,5 @@ View an example of the GUI implemented with Unity: [Art Viewer](https://sites.go
 ![Screenshot](https://github.com/user-attachments/assets/ac6bfd24-6198-4d5f-af97-cc5a05e05125)
 
 ## Code Authorship Declaration
-To the best of my recoglection, all or nearly all code in this project was written by me (Wartem) rather than 
+To the best of my recollection, all or nearly all code in this project was written by me (Wartem) rather than 
 artificial intelligence or automated code generation tools.

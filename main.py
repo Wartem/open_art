@@ -4,6 +4,16 @@ from nga import NGA
 from open_sqlite_handling import sql_injection_menu
 from a_constants import *
 
+import time
+import os.path
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+from open_source import Source
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+
 
 def init():
     if not os.path.exists("open_data_art"):

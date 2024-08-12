@@ -93,8 +93,6 @@ class Art_csv:
 
         for item in report[1]:
             from_d = list(item)
-            # print(from_d[0]) # columnname
-            # print(from_d[1]) # dict, str: 123245
             dict_d = str(from_d[1])
             print(
                 from_d[0]

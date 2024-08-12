@@ -3,13 +3,11 @@ import time
 import os
 import platform
 
-
 def get_month_name_from_int(months, num):
     for key, value in months.items():
         if num == value:
             return key
     return num
-
 
 def creation_date(path_to_file) -> tuple:
     """

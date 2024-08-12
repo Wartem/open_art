@@ -1,7 +1,5 @@
 from pprint import pprint
-
 import wikipedia as wiki
-
 
 # Prevents having Author objects with uninitialized members
 class Author_Factory:

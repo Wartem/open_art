@@ -1,10 +1,8 @@
 import os
 
-
 # TODO: upgrade to pathlib path
 # TODO: Environment Variables:
-#       making-use-of-environment-variables-in-python
-
+#  making-use-of-environment-variables-in-python
 # __all__ = ["APP_NAME", OPEN_DATA_NGA_FILE]
 
 def print_constants():

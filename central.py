@@ -5,11 +5,6 @@ import pandas as pd
 from a_constants import Constants
 import re
 
-#nga = NGA()
-#mm = MM()
-
-#nga.download_open_data()
-
 ints = ["beginyear", "endyear", "width", "height", "displaydate"]
 
 res_csv_file_name = "res.csv"

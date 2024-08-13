@@ -1,17 +1,18 @@
 ## Dependencies
 
-![attrs](https://img.shields.io/badge/attrs-24.2.0-brightgreen) 
-![beautifulsoup4](https://img.shields.io/badge/beautifulsoup4-4.12.3-brightgreen) 
-![chromedrivermanager](https://img.shields.io/badge/chromedrivermanager-0.0.1-brightgreen) 
-![numpy](https://img.shields.io/badge/numpy-2.0.1-brightgreen) 
-![pandas](https://img.shields.io/badge/pandas-2.2.2-brightgreen) 
-![python-dotenv](https://img.shields.io/badge/python--dotenv-1.0.1-brightgreen)  
-![pywin32](https://img.shields.io/badge/pywin32-306-brightgreen) 
-![requests](https://img.shields.io/badge/requests-2.32.3-brightgreen) 
-![selenium](https://img.shields.io/badge/selenium-4.23.1-brightgreen) 
-![webdriver-manager](https://img.shields.io/badge/webdriver--manager-4.0.2-brightgreen) 
-![wget](https://img.shields.io/badge/wget-3.2-brightgreen)  
-![wikipedia](https://img.shields.io/badge/wikipedia-1.4.0-brightgreen) 
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![attrs](https://img.shields.io/badge/attrs-24.2.0-31C754?style=flat&logo=python&logoColor=white)
+![beautifulsoup4](https://img.shields.io/badge/beautifulsoup4-4.12.3-8CA1AF?style=flat&logo=python&logoColor=white)
+![chromedrivermanager](https://img.shields.io/badge/chromedrivermanager-0.0.1-4285F4?style=flat&logo=google-chrome&logoColor=white)
+![numpy](https://img.shields.io/badge/numpy-2.0.1-013243?style=flat&logo=numpy&logoColor=white)
+![pandas](https://img.shields.io/badge/pandas-2.2.2-150458?style=flat&logo=pandas&logoColor=white)
+![python-dotenv](https://img.shields.io/badge/python--dotenv-1.0.1-2F9331?style=flat&logo=python&logoColor=white)
+![pywin32](https://img.shields.io/badge/pywin32-306-0078D6?style=flat&logo=windows&logoColor=white)
+![requests](https://img.shields.io/badge/requests-2.32.3-2C8EBB?style=flat&logo=python&logoColor=white)
+![selenium](https://img.shields.io/badge/selenium-4.23.1-43B02A?style=flat&logo=selenium&logoColor=white)
+![webdriver-manager](https://img.shields.io/badge/webdriver--manager-4.0.2-4285F4?style=flat&logo=google-chrome&logoColor=white)
+![wget](https://img.shields.io/badge/wget-3.2-00ADD8?style=flat&logo=gnu&logoColor=white)
+![wikipedia](https://img.shields.io/badge/wikipedia-1.4.0-000000?style=flat&logo=wikipedia&logoColor=white)
 
 # OpenArt
 ### Making open art data ready to use

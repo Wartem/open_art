@@ -1,3 +1,18 @@
+## Dependencies
+
+![attrs](https://img.shields.io/badge/attrs-24.2.0-brightgreen) 
+![beautifulsoup4](https://img.shields.io/badge/beautifulsoup4-4.12.3-brightgreen) 
+![chromedrivermanager](https://img.shields.io/badge/chromedrivermanager-0.0.1-brightgreen) 
+![numpy](https://img.shields.io/badge/numpy-2.0.1-brightgreen) 
+![pandas](https://img.shields.io/badge/pandas-2.2.2-brightgreen) 
+![python-dotenv](https://img.shields.io/badge/python--dotenv-1.0.1-brightgreen)  
+![pywin32](https://img.shields.io/badge/pywin32-306-brightgreen) 
+![requests](https://img.shields.io/badge/requests-2.32.3-brightgreen) 
+![selenium](https://img.shields.io/badge/selenium-4.23.1-brightgreen) 
+![webdriver-manager](https://img.shields.io/badge/webdriver--manager-4.0.2-brightgreen) 
+![wget](https://img.shields.io/badge/wget-3.2-brightgreen)  
+![wikipedia](https://img.shields.io/badge/wikipedia-1.4.0-brightgreen) 
+
 # OpenArt
 ### Making open art data ready to use
 

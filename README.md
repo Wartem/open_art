@@ -16,19 +16,28 @@
 # OpenArt
 ### Making open art data ready to use
 
-**Currently Supported:**
+## Currently Supported:
 
 - **National Gallery of Art:**  
   CSV files are automatically downloaded, extracted from open data ZIP files, and converted into a SQLite database file.
 
 - **Metropolitan Museum of Art:**  
-  Code is provided to add painting URLs from their website, complementing their open data. This data is included in the Open Art Viewer.
+  This module, currently used as a script, processes open data from the Metropolitan Museum of Art (The Met). It downloads and filters the museum's public domain painting data, then enriches it by scraping image URLs from The Met's website. Key features include:
+  
+  - Reads and filters The Met's open access CSV file
+  - Uses Selenium WebDriver to fetch high-resolution image URLs for each painting
+  - Creates a new CSV file with filtered and enriched painting data
+  - Implements incremental updates, avoiding duplicate entries
+  - Handles errors and continues processing if issues arise with specific entries
+  
+  The resulting dataset includes detailed information about public domain paintings from The Met, complete with direct links to high-quality images, ready for integration into the Open Art Viewer.
 
 
-# OpenArt Project
+# OpenArt Project with focus on National Gallery of Art (NGA)
 
 ## Overview
-OpenArt is a Python-based project designed to download, process, and manage art data from the National Gallery of Art (NGA). The project automates the retrieval of open data, processes it, and prepares it for further use or analysis.
+OpenArt is a Python-based project designed to download, process, and manage art data from the National Gallery of Art (NGA). As mentioned above, Metropolitan Museum of Art is currently standalone. 
+OpenArt automates the retrieval of open data, processes it, and prepares it for further use or analysis.
 
 ## How It Works
 

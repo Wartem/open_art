@@ -1,8 +1,9 @@
 import os
+
+from a_constants import *
 from csv_menu import csv_menu_loop
 from nga import NGA
 from open_sqlite_handling import sql_injection_menu
-from a_constants import *
 
 
 def init():
@@ -13,10 +14,13 @@ def init():
 
 
 def menu():
-    is_windows = "Windows" in os.getenv('OS')
-    user_name = os.getenv('HOMEPATH').rsplit("\\")
-    user_name = user_name[len(user_name) - 1] if is_windows else \
-        "<Not Windows User (that's fine!)>"
+    is_windows = "Windows" in os.getenv("OS")
+    user_name = os.getenv("HOMEPATH").rsplit("\\")
+    user_name = (
+        user_name[len(user_name) - 1]
+        if is_windows
+        else "<Not Windows User (that's fine!)>"
+    )
 
     while True:
         print(
@@ -59,7 +63,7 @@ def menu():
 
 def main():
     init()
-    #print_constants()
+    # print_constants()
     menu()
 
 

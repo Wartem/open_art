@@ -1,8 +1,20 @@
 class Object:
 
-    def __init__(self, source, objectid, title,
-                 attribution, beginyear, endyear, displaydate,
-                 classification, medium, width, height, iiifurl):
+    def __init__(
+        self,
+        source,
+        objectid,
+        title,
+        attribution,
+        beginyear,
+        endyear,
+        displaydate,
+        classification,
+        medium,
+        width,
+        height,
+        iiifurl,
+    ):
         self.source = source
         self.objectid = objectid
         self.title = title
@@ -14,7 +26,7 @@ class Object:
         self.medium = medium
         self.width = width
         self.height = height
-        
+
         self.iiifurl = iiifurl
 
         self.imgurl_full = ""
@@ -32,12 +44,35 @@ class Object:
             if self.height > 4096:
                 self.height = 4096
 
-            self.imgurl_full = self.iiifurl + "/full/!" + self.width + "," + self.height + "/0/default.jpg"
+            self.imgurl_full = (
+                self.iiifurl
+                + "/full/!"
+                + self.width
+                + ","
+                + self.height
+                + "/0/default.jpg"
+            )
         else:
-            self.imgurl_full = self.iiifurl + "/full/" + self.width + "," + self.height + "/0/default.jpg"
+            self.imgurl_full = (
+                self.iiifurl
+                + "/full/"
+                + self.width
+                + ","
+                + self.height
+                + "/0/default.jpg"
+            )
 
         if self.height > 1500 or self.width > 1500:
-            self.imgurl_downsized = self.iiifurl + "/full/!" + 1500 + "," + 1500 + "/0/default.jpg"
+            self.imgurl_downsized = (
+                self.iiifurl + "/full/!" + 1500 + "," + 1500 + "/0/default.jpg"
+            )
         else:
-            self.imgurl_downsized = self.iiifurl + "/full/!" + self.width + "," + self.height + "/0/default.jpg"
+            self.imgurl_downsized = (
+                self.iiifurl
+                + "/full/!"
+                + self.width
+                + ","
+                + self.height
+                + "/0/default.jpg"
+            )
             self.imgurl_thumb = self.iiifurl + "/full/!200,200/0/default.jpg"

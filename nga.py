@@ -1,25 +1,24 @@
 # Standard library imports
-import os
-import sys
-import glob
-import shutil
 import datetime
+import glob
+import os
+import shutil
+import sys
+from datetime import datetime
+from pathlib import Path
 from zipfile import ZipFile
 
+import pandas as pd
 # Third-party library imports
 import requests
 import wget
-import pandas as pd
 from bs4 import BeautifulSoup
+from dateutil import parser
 
 # Local imports
 from a_constants import Constants
 from csv_info import get_file_creation_date, get_month_name_from_int
 from open_source import Source
-
-from pathlib import Path
-from datetime import datetime
-from dateutil import parser
 
 
 class NGA(Source):
@@ -32,7 +31,6 @@ class NGA(Source):
 
     def unpack_and_create_csv(self):
         self.extract_zip_and_fix()
-
 
     @staticmethod
     def _get_nga_latest_remote_git_update_date():
@@ -54,8 +52,7 @@ class NGA(Source):
         day = int(d_str.split(",")[0].split(" ")[1])
         date = datetime.datetime(year, month, day)
         return date
-    
-    
+
     @staticmethod
     def get_nga_latest_remote_git_update_date():
         url = "https://api.github.com/repos/NationalGalleryOfArt/opendata/commits"
@@ -68,8 +65,10 @@ class NGA(Source):
             commits = response.json()
             if commits:
                 latest_commit = commits[0]
-                commit_date = parser.parse(latest_commit['commit']['committer']['date'])
-                return commit_date.replace(tzinfo=None)  # Remove timezone info for consistency
+                commit_date = parser.parse(latest_commit["commit"]["committer"]["date"])
+                return commit_date.replace(
+                    tzinfo=None
+                )  # Remove timezone info for consistency
             else:
                 print("No commits found")
                 return None
@@ -81,18 +80,21 @@ class NGA(Source):
             print(f"Error parsing commit data: {e}")
             return None
 
-
     def is_nga_file_update_needed(self):
         git_date = self.get_nga_latest_remote_git_update_date()
         local_file_path = Constants.NGA_ZIP_FILE_PATH
-        
+
         if local_file_path.exists():
             creation_date, altered_date = get_file_creation_date(str(local_file_path))
 
             if git_date > creation_date:
-                print(f"A seemingly newer version is available for {Constants.NGA_REMOTE_DATA_ZIP}")
+                print(
+                    f"A seemingly newer version is available for {Constants.NGA_REMOTE_DATA_ZIP}"
+                )
             else:
-                print(f"Your file is up to date. No need to download again from\n{Constants.NGA_REMOTE_DATA_ZIP}")
+                print(
+                    f"Your file is up to date. No need to download again from\n{Constants.NGA_REMOTE_DATA_ZIP}"
+                )
 
             print(
                 f"File on server was uploaded: {git_date.year} "
@@ -111,14 +113,15 @@ class NGA(Source):
 
             return git_date > creation_date
         else:
-            print(f"Local file not found. Downloading from {Constants.NGA_REMOTE_DATA_ZIP}")
+            print(
+                f"Local file not found. Downloading from {Constants.NGA_REMOTE_DATA_ZIP}"
+            )
             return True
 
     @staticmethod
     def get_month_name_from_int(months_dict, month_number):
         return list(months_dict.keys())[list(months_dict.values()).index(month_number)]
 
-
     def download_zip_if_needed(self):
         if Constants.NGA_ZIP_FILE_PATH.exists():
             self.is_nga_file_update_needed()
@@ -127,15 +130,22 @@ class NGA(Source):
                     Constants.NGA_ZIP_FILE_PATH.unlink()
                     print("Old file removed.")
 
-                self.download_zip(Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER))
-                if input(
-                    f"Extract the downloaded {Constants.NGA_ZIP_FILE_NAME} "
-                    "and create/replace the database? \nyes/no "
-                ).lower() == "yes":
+                self.download_zip(
+                    Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER)
+                )
+                if (
+                    input(
+                        f"Extract the downloaded {Constants.NGA_ZIP_FILE_NAME} "
+                        "and create/replace the database? \nyes/no "
+                    ).lower()
+                    == "yes"
+                ):
                     self.extract_zip_and_fix()
         else:
             print("No file found. Downloading...")
-            self.download_zip(Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER))
+            self.download_zip(
+                Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER)
+            )
             self.extract_zip_and_fix()
 
     def download_zip_if_needed(self):
@@ -146,17 +156,23 @@ class NGA(Source):
                     Constants.NGA_ZIP_FILE_PATH.unlink()
                     print("Old file removed.")
 
-                self.download_zip(Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER))
-                if input(
-                    f"Extract the downloaded {Constants.NGA_ZIP_FILE_NAME} "
-                    "and create/replace the database? \nyes/no "
-                ).lower() == "yes":
+                self.download_zip(
+                    Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER)
+                )
+                if (
+                    input(
+                        f"Extract the downloaded {Constants.NGA_ZIP_FILE_NAME} "
+                        "and create/replace the database? \nyes/no "
+                    ).lower()
+                    == "yes"
+                ):
                     self.extract_zip_and_fix()
         else:
             print("No file found. Downloading...")
-            self.download_zip(Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER))
+            self.download_zip(
+                Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER)
+            )
             self.extract_zip_and_fix()
-
 
     @staticmethod
     def drop_unwanted_columns(df: pd.DataFrame):
@@ -164,7 +180,6 @@ class NGA(Source):
             if col not in Constants.COLUMNS_USED:
                 df.drop(col, axis=1, inplace=True)
         return df
-
 
     def fix_image_properties(self, df: pd.DataFrame):
 
@@ -185,15 +200,18 @@ class NGA(Source):
                 if height > 4096:
                     height = 4096
 
-                imgurl_full = f"{iiifurl}/full/!{str(width)},{str(height)}/0/default.jpg"
+                imgurl_full = (
+                    f"{iiifurl}/full/!{str(width)},{str(height)}/0/default.jpg"
+                )
             else:
                 imgurl_full = f"{iiifurl}/full/{str(width)},{str(height)}/0/default.jpg"
 
             if height > 1500 or width > 1500:
                 imgurl_downsized = iiifurl + "/full/!1500,1500/0/default.jpg"
             else:
-                imgurl_downsized = iiifurl + \
-                    f"/full/!{str(width)},{str(height)}/0/default.jpg"
+                imgurl_downsized = (
+                    iiifurl + f"/full/!{str(width)},{str(height)}/0/default.jpg"
+                )
 
             imgurl_thumb = iiifurl + "/full/!200,200/0/default.jpg"
 
@@ -204,24 +222,23 @@ class NGA(Source):
 
         return df
 
-
     def merge(self, csv1_file_name, csv2_file_name):
         # reading two csv files
-        df1 = pd.read_csv(csv1_file_name, on_bad_lines='skip',
-                          index_col=False, dtype='unicode')
-        df2 = pd.read_csv(csv2_file_name, on_bad_lines='skip',
-                          index_col=False, dtype='unicode')
+        df1 = pd.read_csv(
+            csv1_file_name, on_bad_lines="skip", index_col=False, dtype="unicode"
+        )
+        df2 = pd.read_csv(
+            csv2_file_name, on_bad_lines="skip", index_col=False, dtype="unicode"
+        )
 
         df1 = self.drop_unwanted_columns(df1)
         df2 = self.drop_unwanted_columns(df2)
 
-        res = pd.merge(df1, df2,
-                       on=['objectid'],
-                       how='inner')
+        res = pd.merge(df1, df2, on=["objectid"], how="inner")
 
         res = self.fix_image_properties(res)  # fix_image_properties()
 
-        res.drop('iiifurl', inplace=True, axis=1)
+        res.drop("iiifurl", inplace=True, axis=1)
 
         res.to_csv(csv1_file_name, index=False)
         if os.path.exists(csv2_file_name):
@@ -236,8 +253,10 @@ class NGA(Source):
         # Prepare merge objects.csv with published_images.csv
         for file in csv_file_names:
             if file.name == "published_images.csv":
-                df = pd.read_csv(file, on_bad_lines='skip', index_col=False, dtype='unicode')
-                df.rename(columns={'depictstmsobjectid': 'objectid'}, inplace=True)
+                df = pd.read_csv(
+                    file, on_bad_lines="skip", index_col=False, dtype="unicode"
+                )
+                df.rename(columns={"depictstmsobjectid": "objectid"}, inplace=True)
                 df.to_csv(file)
 
         objects_csv = art_folder_path / "objects.csv"
@@ -254,14 +273,13 @@ class NGA(Source):
         # Implement your merge logic here
         pass
 
-
     def extract_zip_and_fix(self):
         if Constants.NGA_ZIP_FILE_PATH.exists():
             print(f"Extracting from: {Constants.NGA_ZIP_FILE_PATH}")
-            
+
             # Create the directory structure if it doesn't exist
             Constants.NGA_CSV_CONTAINER.mkdir(parents=True, exist_ok=True)
-            
+
             with ZipFile(Constants.NGA_ZIP_FILE_PATH, "r") as zip_f:
                 zip_f.printdir()
                 print("Extract start...")
@@ -271,20 +289,21 @@ class NGA(Source):
                         if end_part in Constants.FILES_USED:
                             print(f"Extracting: {file}")
                             zip_f.extract(file, Constants.NGA_FOLDER_RENAME_TO)
-                
-                print(f"Extraction complete. Files should be in: {Constants.NGA_CSV_CONTAINER}")
+
+                print(
+                    f"Extraction complete. Files should be in: {Constants.NGA_CSV_CONTAINER}"
+                )
                 print(f"Cleaning up files in: {Constants.NGA_CSV_CONTAINER}")
                 self.fix_nga_csv_in_folder(Constants.NGA_CSV_CONTAINER)
         else:
             print(f"Zip file not found: {Constants.NGA_ZIP_FILE_PATH}")
-
 
     def _extract_zip_and_fix(self):
         if os.path.exists(Constants.NGA_ZIP_FILE_PATH):
             print(Constants.NGA_ZIP_FILE_PATH)
             if os.path.exists(Constants.NGA_FOLDER_RENAME_TO):
                 shutil.rmtree(Constants.NGA_FOLDER_RENAME_TO)
-            
+
             with ZipFile(Constants.NGA_ZIP_FILE_PATH, "r") as zip_f:
                 zip_f.printdir()
                 print("Extract start...")
@@ -295,24 +314,27 @@ class NGA(Source):
                         end_part = file.split("data/")[-1]
                         if end_part in Constants.FILES_USED:
                             zip_f.extract(file, Constants.NGA_FOLDER_RENAME_TO)
-                
+
                 if zip_f.namelist():
                     # Construct the full path for the folder to be renamed
-                    old_folder_path = os.path.join(Constants.NGA_open_data_art, Constants.NGA_FOLDER_TO_RENAME)
+                    old_folder_path = os.path.join(
+                        Constants.NGA_open_data_art, Constants.NGA_FOLDER_TO_RENAME
+                    )
                     # Rename the folder
                     if os.path.exists(old_folder_path):
                         os.rename(old_folder_path, Constants.NGA_FOLDER_RENAME_TO)
-                    
+
                     print("Now cleaning up the files in", Constants.NGA_CSV_CONTAINER)
                     self.fix_nga_csv_in_folder(Constants.NGA_CSV_CONTAINER)
                     print("Extract complete!")
                 else:
                     print("Extract failed.")
 
-
     def download_zip(self, data_url, download_folder):
         def bar_progress(current, total, width=80):
-            progress_message = f"Downloading: {current / total * 100:.2f}% [{current} / {total}] bytes"
+            progress_message = (
+                f"Downloading: {current / total * 100:.2f}% [{current} / {total}] bytes"
+            )
             sys.stdout.write("\r" + progress_message)
             sys.stdout.flush()
 
@@ -327,10 +349,12 @@ class NGA(Source):
             print(f"\nAn error occurred during download: {e}")
             return None
 
-
     def bar_progress(current, total, width=80):
         progress_message = "Downloading: %d%% [%d / %d] bytes" % (
-            current / total * 100, current, total)
+            current / total * 100,
+            current,
+            total,
+        )
         # Don't use print() as it will print in new line every time.
         sys.stdout.write("\r" + progress_message)
         sys.stdout.flush()

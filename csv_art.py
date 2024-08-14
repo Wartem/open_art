@@ -1,4 +1,5 @@
 from pprint import pprint
+
 import pandas as pd
 
 
@@ -18,7 +19,9 @@ class Art_csv:
 
     def __init__(self, filepath: str) -> None:
         self.filepath = filepath
-        self.data = pd.read_csv(filepath, on_bad_lines='skip', index_col=False, dtype='unicode')
+        self.data = pd.read_csv(
+            filepath, on_bad_lines="skip", index_col=False, dtype="unicode"
+        )
         # self.head = self.data.head()
         self.number_of_rows = self.data.shape[0]
         self.number_of_columns = self.data.shape[1]
@@ -107,7 +110,6 @@ class Art_csv:
         print("")
         print("".join(sorted(dirty)))
         pprint("-------------------------")
-        
 
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         print("Not standalone")

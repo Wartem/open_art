@@ -1,13 +1,15 @@
 import datetime
-import time
 import os
 import platform
+import time
+
 
 def get_month_name_from_int(months, num):
     for key, value in months.items():
         if num == value:
             return key
     return num
+
 
 def creation_date(path_to_file) -> tuple:
     """
@@ -29,14 +31,18 @@ def creation_date(path_to_file) -> tuple:
 
 def get_file_creation_date(filename) -> tuple:
     times = creation_date(filename)
-    
+
     creation_time = time.ctime(times[0])
     creation_time = datetime.datetime.strptime(creation_time, "%a %b %d %H:%M:%S %Y")
-    creation_time = datetime.datetime(creation_time.year, creation_time.month, creation_time.day)
-    
+    creation_time = datetime.datetime(
+        creation_time.year, creation_time.month, creation_time.day
+    )
+
     altered_time = time.ctime(times[1]) if times[1] else creation_time
     if altered_time:
         altered_time = datetime.datetime.strptime(altered_time, "%a %b %d %H:%M:%S %Y")
-        altered_time = datetime.datetime(altered_time.year, altered_time.month, altered_time.day)
-    
+        altered_time = datetime.datetime(
+            altered_time.year, altered_time.month, altered_time.day
+        )
+
     return creation_time, altered_time

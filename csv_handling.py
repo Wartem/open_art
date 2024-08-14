@@ -1,40 +1,47 @@
 import glob
 from pathlib import Path
 
-from csv_art import Art_csv
 from a_constants import Constants
+from csv_art import Art_csv
 
 csv_directory_in_use = Path()
 root_dir_folders = []
 csv_file_names = []
+
 
 def init():
     global root_dir_folders
     root_dir_folders = [f for f in Constants.NGA_open_data_art.iterdir() if f.is_dir()]
     # print_folder_names()
 
+
 def print_folder_names():
     print("Folders:")
     for folder_name in root_dir_folders:
         print(f"--> {folder_name.name}")
+
 
 def print_file_names():
     print("File names:")
     for file_name in csv_file_names:
         print(file_name.name)
 
+
 def set_csv_folder(user_dir):
     global csv_directory_in_use
-    csv_directory_in_use = Constants.NGA_open_data_art / user_dir / "opendata-main" / "data"
+    csv_directory_in_use = (
+        Constants.NGA_open_data_art / user_dir / "opendata-main" / "data"
+    )
     global csv_file_names
     csv_file_names = list(csv_directory_in_use.glob("*.csv"))
+
 
 def choose_art_data():
     print("\nFolders:")
     art_dirs = [d for d in Constants.NGA_open_data_art.iterdir() if d.is_dir()]
     for art_dir in art_dirs:
         print(f"--> {art_dir.name}")
-    
+
     if not art_dirs:
         print("No art data directories found.")
         return None
@@ -48,17 +55,19 @@ def choose_art_data():
         else:
             print("Invalid directory. Please choose from the list above.")
 
+
 def type_file_name():
     user_input = input("Type the name of the file to use\n")
     file_path = csv_directory_in_use / user_input
     if not file_path.suffix:
-        file_path = file_path.with_suffix('.csv')
-    
+        file_path = file_path.with_suffix(".csv")
+
     for file in csv_file_names:
         if file_path.name in file.name:
             return str(file)
 
     return ""
+
 
 def investigate():
     file_to_use = type_file_name()
@@ -77,5 +86,6 @@ def investigate():
             if d == "2":
                 break
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print("Not standalone")

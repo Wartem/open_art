@@ -1,12 +1,14 @@
 import sqlite3
+
 import pandas as pd
+
 from a_constants import *
 
 
 def sqlite_creation_fill(db_file):
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
-    create_table = ''' CREATE TABLE IF NOT EXISTS objects(
+    create_table = """ CREATE TABLE IF NOT EXISTS objects(
             source TEXT NOT NULL,
             objectid TEXT NOT NULL, \
             title TEXT NOT NULL, \
@@ -20,14 +22,18 @@ def sqlite_creation_fill(db_file):
             height INTEGER NOT NULL, \
             imgurl_thumb TEXT NOT NULL, \
             imgurl_downsized TEXT NOT NULL, \
-            imgurl_full TEXT NOT NULL PRIMARY KEY); '''
+            imgurl_full TEXT NOT NULL PRIMARY KEY); """
 
     cursor.execute(create_table)
     conn.commit()
 
-    df = pd.read_csv(Constants.NGA_CSV_CONTAINER + "\\objects.csv",
-                     on_bad_lines='skip', index_col=False, dtype='unicode')
-    df.to_sql('objects', conn, if_exists='append', index=False, chunksize=1000)
+    df = pd.read_csv(
+        Constants.NGA_CSV_CONTAINER + "\\objects.csv",
+        on_bad_lines="skip",
+        index_col=False,
+        dtype="unicode",
+    )
+    df.to_sql("objects", conn, if_exists="append", index=False, chunksize=1000)
 
     conn.close()
 
@@ -43,7 +49,9 @@ def iter_containing_none(iter):
     return False
 
 
-def sql_injection(query: str, fetch_all=True, db_file=Constants.SQLite_OPEN_ART_DB_FILE_NAME) -> list:
+def sql_injection(
+    query: str, fetch_all=True, db_file=Constants.SQLite_OPEN_ART_DB_FILE_NAME
+) -> list:
     if not os.path.exists(db_file):
         print("SQLite db does not exists. Create one first.")
     else:
@@ -85,8 +93,7 @@ def column_all(column_name):
 def column_by_frequency(column_name):
     name_list = sql_injection(sql_column_freq(column_name), True)
     print(f"{column_name.capitalize()} in database, sorted by occurrence.")
-    print(
-        *(f"{name[0]} ({name[1]} occurrences)," for name in name_list), "\n" * 2)
+    print(*(f"{name[0]} ({name[1]} occurrences)," for name in name_list), "\n" * 2)
     return name_list
 
 
@@ -143,14 +150,14 @@ def sql_injection_menu():
                 break
 
 
-'''
+"""
     query = "SELECT * FROM paintings_info WHERE " + columnname + " like '%" + rowValue + "%'";
 
     query = "SELECT * FROM paintings_info WHERE " + columnname + " like '" + rowValue + "%'";
 
     query = "SELECT * FROM paintings_info WHERE " + columnname + " = '" + rowValue + "'";
     
-'''
+"""
 
 
 def remove_old_and_create_new_sqlite_db():
@@ -160,18 +167,19 @@ def remove_old_and_create_new_sqlite_db():
 
 
 def _sqlin(query):
-    return ''.join(sql_injection(query))
+    return "".join(sql_injection(query))
 
 
 def _gradion():
     import gradio as gr
+
     # 2. Create a Gradio interface with prefered input and output widgets
     app = gr.Interface(_sqlin, inputs=["text"], outputs=["text"])
     # 3. Launch the app. Bingo!
     app.launch()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Not standalone")
     # name_list_test = sql_injection(
     # "SELECT attribution, COUNT(attribution) AS count FROM objects GROUP BY attribution ORDER BY count DESC")

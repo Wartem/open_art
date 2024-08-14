@@ -1,8 +1,4 @@
-from csv_handling import \
-    init, \
-    choose_art_data, \
-    print_file_names, \
-    investigate
+from csv_handling import choose_art_data, init, investigate, print_file_names
 
 
 def csv_menu_loop():
@@ -12,9 +8,11 @@ def csv_menu_loop():
     while art_dir_in_use:
         print("")
         print("Welcome to Art Data Info")
-        print(
-            "Directory in use:", art_dir_in_use
-        ) if art_dir_in_use else "No directory found!"
+        (
+            print("Directory in use:", art_dir_in_use)
+            if art_dir_in_use
+            else "No directory found!"
+        )
         # pprint("Diretory in use: " + art_dir_in_use) if art_dir_in_use else "No directory found!"
         print("Type feature corresponding number:")
         print("1. Print all available files.")
@@ -29,5 +27,6 @@ def csv_menu_loop():
             case "3":
                 break
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print("Not standalone")

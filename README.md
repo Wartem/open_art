@@ -1,28 +1,90 @@
 ## Dependencies
 
-![attrs](https://img.shields.io/badge/attrs-24.2.0-brightgreen) 
-![beautifulsoup4](https://img.shields.io/badge/beautifulsoup4-4.12.3-brightgreen) 
-![chromedrivermanager](https://img.shields.io/badge/chromedrivermanager-0.0.1-brightgreen) 
-![numpy](https://img.shields.io/badge/numpy-2.0.1-brightgreen) 
-![pandas](https://img.shields.io/badge/pandas-2.2.2-brightgreen) 
-![python-dotenv](https://img.shields.io/badge/python--dotenv-1.0.1-brightgreen)  
-![pywin32](https://img.shields.io/badge/pywin32-306-brightgreen) 
-![requests](https://img.shields.io/badge/requests-2.32.3-brightgreen) 
-![selenium](https://img.shields.io/badge/selenium-4.23.1-brightgreen) 
-![webdriver-manager](https://img.shields.io/badge/webdriver--manager-4.0.2-brightgreen) 
-![wget](https://img.shields.io/badge/wget-3.2-brightgreen)  
-![wikipedia](https://img.shields.io/badge/wikipedia-1.4.0-brightgreen) 
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![attrs](https://img.shields.io/badge/attrs-24.2.0-31C754?style=flat&logo=python&logoColor=white)
+![beautifulsoup4](https://img.shields.io/badge/beautifulsoup4-4.12.3-8CA1AF?style=flat&logo=python&logoColor=white)
+![chromedrivermanager](https://img.shields.io/badge/chromedrivermanager-0.0.1-4285F4?style=flat&logo=google-chrome&logoColor=white)
+![numpy](https://img.shields.io/badge/numpy-2.0.1-013243?style=flat&logo=numpy&logoColor=white)
+![pandas](https://img.shields.io/badge/pandas-2.2.2-150458?style=flat&logo=pandas&logoColor=white)
+![python-dotenv](https://img.shields.io/badge/python--dotenv-1.0.1-2F9331?style=flat&logo=python&logoColor=white)
+![pywin32](https://img.shields.io/badge/pywin32-306-0078D6?style=flat&logo=windows&logoColor=white)
+![requests](https://img.shields.io/badge/requests-2.32.3-2C8EBB?style=flat&logo=python&logoColor=white)
+![selenium](https://img.shields.io/badge/selenium-4.23.1-43B02A?style=flat&logo=selenium&logoColor=white)
+![webdriver-manager](https://img.shields.io/badge/webdriver--manager-4.0.2-4285F4?style=flat&logo=google-chrome&logoColor=white)
+![wget](https://img.shields.io/badge/wget-3.2-00ADD8?style=flat&logo=gnu&logoColor=white)
+![wikipedia](https://img.shields.io/badge/wikipedia-1.4.0-000000?style=flat&logo=wikipedia&logoColor=white)
 
 # OpenArt
 ### Making open art data ready to use
 
-**Currently Supported:**
+## Currently Supported:
 
 - **National Gallery of Art:**  
   CSV files are automatically downloaded, extracted from open data ZIP files, and converted into a SQLite database file.
 
 - **Metropolitan Museum of Art:**  
-  Code is provided to add painting URLs from their website, complementing their open data. This data is included in the Open Art Viewer.
+  This module, currently used as a script, processes open data from the Metropolitan Museum of Art (The Met). It downloads and filters the museum's public domain painting data, then enriches it by scraping image URLs from The Met's website. Key features include:
+  
+  - Reads and filters The Met's open access CSV file
+  - Uses Selenium WebDriver to fetch high-resolution image URLs for each painting
+  - Creates a new CSV file with filtered and enriched painting data
+  - Implements incremental updates, avoiding duplicate entries
+  - Handles errors and continues processing if issues arise with specific entries
+  
+  The resulting dataset includes detailed information about public domain paintings from The Met, complete with direct links to high-quality images, ready for integration into the Open Art Viewer.
+
+
+# OpenArt Project with focus on National Gallery of Art (NGA)
+
+## Overview
+OpenArt is a Python-based project designed to download, process, and manage art data from the National Gallery of Art (NGA). As mentioned above, Metropolitan Museum of Art is currently standalone. 
+OpenArt automates the retrieval of open data, processes it, and prepares it for further use or analysis.
+
+## How It Works
+
+1. **Data Retrieval**
+   - The `NGA` class handles downloading data from the National Gallery of Art's GitHub repository.
+   - It checks for updates by comparing local file dates with the latest commit date on GitHub.
+   - If an update is needed, it downloads a ZIP file containing the latest data.
+
+2. **Data Extraction and Processing**
+   - The downloaded ZIP file is extracted to a specified directory.
+   - CSV files, particularly 'objects.csv' and 'published_images.csv', are processed.
+   - The `fix_nga_csv_in_folder` method prepares these files for merging.
+
+3. **Data Merging and Cleaning**
+   - The `merge` method combines data from 'objects.csv' and 'published_images.csv'.
+   - Unwanted columns are removed, and image properties are adjusted.
+   - The resulting data is saved back to a CSV file, with redundant files removed.
+
+4. **User Interface**
+   - A menu-driven interface (console) allows users to:
+     - Download new data
+     - Extract and process existing data
+     - View file information
+     - Perform database operations (SQLite)
+
+5. **Constants and Configuration**
+   - The `Constants` class centralizes important variables and paths used throughout the project.
+
+6. **File Handling**
+   - The project uses both `os` and `pathlib` for robust file and directory management across different operating systems.
+
+7. **Error Handling and Logging**
+   - The code includes error handling for download issues, file processing errors, and API requests.
+
+8. **Third-party Libraries**
+   - Utilizes libraries like `requests` for API calls, `pandas` for data manipulation, and `BeautifulSoup` for web scraping.
+
+## Code Authorship Declaration
+To the best of my knowledge, all or nearly all code in this project was written by me (Wartem), rather than generated by artificial intelligence or automated code generation tools. I utilized AI assistance to help identify and fix bugs in August 2024.
+
+Moving forward, I plan to refactor this codebase with the aid of AI tools. However, this refactoring process will be conducted in a balanced manner, ensuring that the project's core structure and logic remain primarily my own work. The AI will be used as a tool to suggest improvements, optimize code, and help with best practices, but all final decisions and implementations will be made by me. This approach aims to enhance the project while maintaining my role as the primary author and architect of the codebase.
+This declaration reflects my commitment to transparency about the use of AI in the development process, while also affirming my central role in the project's creation and evolution.
+
+## To-Do
+### Expand Open Data Collection
+- **Objective**: Enhance the project by integrating open data from additional museums beyond the National Gallery of Art (NGA), like Metropolitan Museum of Art. 
 
 ## Open Art Viewer
 The SQLite file created by OpenArt can be directly used with the Open Art Viewer.  
@@ -32,7 +94,3 @@ You can download it here: [Open Art Viewer 1.0](https://wartem.net/files/OpenArt
 View an example of the GUI implemented with Unity: [Art Viewer](https://sites.google.com/view/wartem/art-viewer)
 
 ![Screenshot](https://github.com/user-attachments/assets/ac6bfd24-6198-4d5f-af97-cc5a05e05125)
-
-## Code Authorship Declaration
-To the best of my recollection, all or nearly all code in this project was written by me (Wartem) rather than 
-artificial intelligence or automated code generation tools.

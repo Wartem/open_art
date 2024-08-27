@@ -86,11 +86,19 @@ This declaration reflects my commitment to transparency about the use of AI in t
 ### Expand Open Data Collection
 - **Objective**: Enhance the project by integrating open data from additional museums beyond the National Gallery of Art (NGA), like Metropolitan Museum of Art. 
 
-## Open Art Viewer
+## Open Art Viewer - Example Usage: GUI with Unity
 The SQLite file created by OpenArt can be directly used with the Open Art Viewer.  
+[Art Viewer](https://sites.google.com/view/wartem/art-viewer)
 You can download it here: [Open Art Viewer 1.0](https://wartem.net/files/OpenArtViewer%201.0.zip) (SQLite file is already included).
 
-## Example Usage: GUI with Unity
-View an example of the GUI implemented with Unity: [Art Viewer](https://sites.google.com/view/wartem/art-viewer)
 
 ![Screenshot](https://github.com/user-attachments/assets/ac6bfd24-6198-4d5f-af97-cc5a05e05125)
+
+## Open Art Web Viewer
+This art viewer is based on Flask and HTML:
+[Open Art Web Viewer Project](https://github.com/Wartem/open_art_web_viewer_lite)
+
+[Live demo](https://open-art-web-viewer-lite-fef64c62288d.herokuapp.com/)
+
+
+![OpenArtWebViewer 2024-08-27 113110](https://github.com/user-attachments/assets/c0c933b4-785b-4dbd-ba7a-3d3252b5cd27)

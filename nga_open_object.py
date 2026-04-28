@@ -24,9 +24,8 @@ class Object:
         self.displaydate = displaydate
         self.classification = classification
         self.medium = medium
-        self.width = width
-        self.height = height
-
+        self.width = int(width)
+        self.height = int(height)
         self.iiifurl = iiifurl
 
         self.imgurl_full = ""
@@ -36,43 +35,14 @@ class Object:
         self.fix_image_properties()
 
     def fix_image_properties(self):
+        w = min(self.width, 4096)
+        h = min(self.height, 4096)
 
-        if self.width > 4096 or self.height > 4096:
-            if self.width > 4096:
-                self.width = 4096
-
-            if self.height > 4096:
-                self.height = 4096
-
-            self.imgurl_full = (
-                self.iiifurl
-                + "/full/!"
-                + self.width
-                + ","
-                + self.height
-                + "/0/default.jpg"
-            )
-        else:
-            self.imgurl_full = (
-                self.iiifurl
-                + "/full/"
-                + self.width
-                + ","
-                + self.height
-                + "/0/default.jpg"
-            )
+        self.imgurl_full = f"{self.iiifurl}/full/!{w},{h}/0/default.jpg"
 
         if self.height > 1500 or self.width > 1500:
-            self.imgurl_downsized = (
-                self.iiifurl + "/full/!" + 1500 + "," + 1500 + "/0/default.jpg"
-            )
+            self.imgurl_downsized = f"{self.iiifurl}/full/!1500,1500/0/default.jpg"
         else:
-            self.imgurl_downsized = (
-                self.iiifurl
-                + "/full/!"
-                + self.width
-                + ","
-                + self.height
-                + "/0/default.jpg"
-            )
-            self.imgurl_thumb = self.iiifurl + "/full/!200,200/0/default.jpg"
+            self.imgurl_downsized = f"{self.iiifurl}/full/!{w},{h}/0/default.jpg"
+
+        self.imgurl_thumb = f"{self.iiifurl}/full/!200,200/0/default.jpg"

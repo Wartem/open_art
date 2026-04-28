@@ -1,3 +1,11 @@
 
 *.pyc
-downloads/opendata-main.zip
+downloads/*
+main.zip5xz65cho.tmp
+.gitignore
+artworksModerna.csv
+MetObjects.csv
+.venv/*
+open_data_art/*
+open_data_art/nga/opendata-main/data/objects.csv
+open_data_art/nga/opendata-main/data/published_images.csv

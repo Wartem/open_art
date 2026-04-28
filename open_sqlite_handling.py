@@ -1,7 +1,5 @@
 import sqlite3
-
 import pandas as pd
-
 from a_constants import *
 
 
@@ -28,7 +26,7 @@ def sqlite_creation_fill(db_file):
     conn.commit()
 
     df = pd.read_csv(
-        Constants.NGA_CSV_CONTAINER + "\\objects.csv",
+        Constants.NGA_CSV_CONTAINER / "objects.csv",
         on_bad_lines="skip",
         index_col=False,
         dtype="unicode",
@@ -66,7 +64,7 @@ def sql_injection(
                 rows = cursor.fetchall()
                 return rows
             else:
-                rows = cursor.fetchall()  # cursor.fetchone()[0]
+                rows = cursor.fetchall() 
                 return [row[0] for row in rows]
 
         else:
@@ -133,7 +131,6 @@ def sql_injection_menu():
                 medium = column_by_frequency("medium")
             case "7":
                 classification = column_by_frequency("classification")
-
             case "8":
                 artist = column_all("attribution")
             case "9":
@@ -150,38 +147,10 @@ def sql_injection_menu():
                 break
 
 
-"""
-    query = "SELECT * FROM paintings_info WHERE " + columnname + " like '%" + rowValue + "%'";
-
-    query = "SELECT * FROM paintings_info WHERE " + columnname + " like '" + rowValue + "%'";
-
-    query = "SELECT * FROM paintings_info WHERE " + columnname + " = '" + rowValue + "'";
-    
-"""
-
-
 def remove_old_and_create_new_sqlite_db():
     if os.path.exists(Constants.SQLite_OPEN_ART_DB_FILE_NAME):
         os.remove(Constants.SQLite_OPEN_ART_DB_FILE_NAME)
     sqlite_creation_fill(Constants.SQLite_OPEN_ART_DB_FILE_NAME)
 
-
-def _sqlin(query):
-    return "".join(sql_injection(query))
-
-
-def _gradion():
-    import gradio as gr
-
-    # 2. Create a Gradio interface with prefered input and output widgets
-    app = gr.Interface(_sqlin, inputs=["text"], outputs=["text"])
-    # 3. Launch the app. Bingo!
-    app.launch()
-
-
 if __name__ == "__main__":
     print("Not standalone")
-    # name_list_test = sql_injection(
-    # "SELECT attribution, COUNT(attribution) AS count FROM objects GROUP BY attribution ORDER BY count DESC")
-    # print("Names of artists in database, sorted by number of artworks.")
-    # sql_injection_menu()

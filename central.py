@@ -1,14 +1,13 @@
 import re
 
 import pandas as pd
-from this import d
 
 from a_constants import Constants
 
 ints = ["beginyear", "endyear", "width", "height", "displaydate"]
 
 res_csv_file_name = "res.csv"
-nga_csv = Constants.NGA_CSV_CONTAINER + "\\" + "objects.csv"
+nga_csv = Constants.NGA_CSV_CONTAINER / "objects.csv"
 
 
 def fill_empty_cells(df: pd.DataFrame) -> None:
@@ -30,7 +29,6 @@ def fill_empty_cells2(df: pd.DataFrame, column_name: str) -> None:
                 df.at[ind, column_name] = 0
             else:
                 df.at[ind, column_name] = f"Unknown {column_name}"
-            # print(df.at[ind, column_name])
 
     for ind in df.index:
         print(df.at[ind, "displaydate"])
@@ -44,12 +42,10 @@ def concat():
     )
     nga = pd.read_csv(nga_csv, on_bad_lines="skip", index_col=False, dtype="unicode")
 
-    # df3 = nga.append(mm, ignore_index=True)
     df3 = pd.concat([nga, mm], axis=0, ignore_index=True)
 
     # Remove invalid rows
     for ind in df3.index:
-        # print("check", df3.index[ind])
         if not "http" in str(df3["imgurl_full"][ind]) or not str(df3["objectid"][ind]):
             print(df3.index[ind])
             df3.drop(df3.index[ind], axis=0, inplace=True)

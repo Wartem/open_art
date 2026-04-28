@@ -1,164 +1,126 @@
-import os.path
+import os
 import time
 
 import pandas as pd
 import requests
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
+import wget
 
+from decorators import logger_exception_only
 from open_source import Source
 
-cookies = {
-    "incap_ses_275_1661977": "dCoOfWMCNGncFfpzeP/QA4If1GIAAAAAH5chfw8ftd2ccCkScCpoPQ==",
-    #'PHPSESSID':'fjmr7plc0dmocm8roq7togcp92',
-    "visid_incap_1661977": "zGu1zEBATdatObOPWOXc5nZczGIAAAAAQUIPAAAAAABO2YfMK/OgqNId+f9JQJp0",
-    "_ga": "GA1.1.1619024324.1657560082",
-    "_gid": "GA1.2.687656694.1657951080",
-}
+_MET_CSV_URL = "https://github.com/metmuseum/openaccess/raw/master/MetObjects.csv"
+_MET_API_URL = "https://collectionapi.metmuseum.org/public/collection/v1/objects/{}"
 
 
 class MM(Source):
-    """
-    The Metropolitan Museum of Art open data source handler.
-    """
 
     def __init__(self):
         self.source_org_file_name = "MetObjects.csv"
         self.res_csv_file_name = "mm_paintings.csv"
-        self.objects = []
 
+    @logger_exception_only
     def download_open_data(self):
-        pass
-        # self.download_zip_if_needed()
+        if os.path.exists(self.source_org_file_name):
+            print(f"{self.source_org_file_name} already exists, skipping download.")
+            return
+        print(f"Downloading {self.source_org_file_name} from Met Museum open access...")
+        wget.download(_MET_CSV_URL, self.source_org_file_name)
+        print()
 
+    @logger_exception_only
     def unpack_and_create_csv(self):
-        pass
-        # self.extract_zip_and_fix()
+        self.filter_update_fetch_fill_csv()
 
-    def get_url_from_url_selenium(self, page_url: str):
+    def get_image_url_from_api(self, object_id: str) -> str:
+        try:
+            response = requests.get(
+                _MET_API_URL.format(object_id), timeout=10
+            )
+            response.raise_for_status()
+            data = response.json()
+            return data.get("primaryImageSmall") or data.get("primaryImage") or ""
+        except Exception:
+            return ""
 
-        options = webdriver.ChromeOptions()
-        options.binary_location = (
-            "C:\Program Files\Google\Chrome Beta\Application\chrome.exe"
-        )
-        options.add_argument("--headless")
-        options.add_argument("--ignore-certificate-errors-spki-list")
-        options.add_argument("--ignore-certificate-errors")
-        options.add_argument("--ignore-ssl-errors")
-        options.add_argument("--test-type")
-        options.add_argument("--log-level=3")
-        chromeDriver = webdriver.Chrome(
-            ChromeDriverManager().install(), options=options
-        )
-
-        chromeDriver.get(page_url)
-        elem = chromeDriver.find_element(By.ID, "artwork__image")
-        img_url = elem.get_attribute("src")
-        return img_url
-
-    def does_id_exist(self, id):
-        df = pd.read_csv(
-            self.res_csv_file_name,
-            on_bad_lines="skip",
-            index_col=False,
-            dtype="unicode",
-        )
-        return df[id].any()
-
+    @logger_exception_only
     def filter_update_fetch_fill_csv(self):
+        if not os.path.exists(self.source_org_file_name):
+            print(f"{self.source_org_file_name} not found. Run download first.")
+            return
 
         if not os.path.exists(self.res_csv_file_name):
             with open(self.res_csv_file_name, "w"):
                 pass
 
-        df_filtered = pd.read_csv(
+        df_source = pd.read_csv(
             self.source_org_file_name,
             on_bad_lines="skip",
             index_col=False,
             dtype="unicode",
         )
 
-        painting_list = []
-        columns = df_filtered.columns.to_list()
+        df_filtered = df_source[
+            (df_source["Classification"] == "Painting")
+            & (df_source["Is Public Domain"] == "True")
+        ].copy()
 
-        for ind in df_filtered.index:
-
-            if (
-                df_filtered["Classification"][ind] == "Painting"
-                and df_filtered["Is Public Domain"][ind] == "True"
-            ):
-
-                painting_list.append(df_filtered.iloc[ind])
-
-        df_filtered = pd.DataFrame(painting_list, columns=columns)
-
-        current_row_num = 0
-        df_to_be_filled = pd.DataFrame()
-
+        df_existing = pd.DataFrame()
         if os.path.getsize(self.res_csv_file_name):
-            df_to_be_filled = pd.read_csv(
+            df_existing = pd.read_csv(
                 self.res_csv_file_name,
                 on_bad_lines="skip",
                 index_col=False,
                 dtype="unicode",
             )
 
-        for ind in df_filtered.index:
-            current_row_num += 1
+        existing_ids = set(df_existing["objectid"].values) if not df_existing.empty else set()
+        total = len(df_filtered)
 
-            if (
-                not df_to_be_filled.empty
-                and df_filtered["Object ID"][ind] in df_to_be_filled["objectid"].values
-            ):
-                print(f"Skips obj {ind} already in csv")
+        for count, (_, row) in enumerate(df_filtered.iterrows(), 1):
+            object_id = str(row["Object ID"]).strip()
+
+            if object_id in existing_ids:
+                print(f"Skipping {object_id} (already in csv) [{count}/{total}]")
                 continue
 
-            obj_list = []
+            print(f"Fetching {object_id} [{count}/{total}]...")
+            img_url = self.get_image_url_from_api(object_id)
 
-            obj = {}
-            obj["source"] = "MM"
-            obj["objectid"] = str(df_filtered["Object ID"][ind]).strip()
-            obj["title"] = str(df_filtered["Title"][ind]).strip()
-            obj["attribution"] = str(df_filtered["Artist Display Name"][ind]).strip()
-            obj["beginyear"] = str(df_filtered["Object Begin Date"][ind]).strip()
-            obj["endyear"] = str(df_filtered["Object End Date"][ind]).strip()
-            obj["displaydate"] = str(df_filtered["Title"][ind]).strip()
-            obj["classification"] = str(df_filtered["Classification"][ind]).strip()
-            obj["medium"] = str(df_filtered["Medium"][ind]).strip()
-            obj["width"] = ""
-            obj["height"] = ""
-
-            img_ = ""
-
-            try:
-                resource = str(df_filtered["Link Resource"][ind]).strip()
-                print(resource, "times:", current_row_num)
-                img_ = self.get_url_from_url_selenium(resource)
-            except:
-                img_ = "link issue"
+            if not img_url:
+                print(f"  No image found for {object_id}, skipping.")
                 continue
 
-            obj["imgurl_thumb"] = img_
-            obj["imgurl_downsized"] = img_
-            obj["imgurl_full"] = img_
+            obj = {
+                "source": "MM",
+                "objectid": object_id,
+                "title": str(row["Title"]).strip(),
+                "attribution": str(row["Artist Display Name"]).strip(),
+                "beginyear": str(row["Object Begin Date"]).strip(),
+                "endyear": str(row["Object End Date"]).strip(),
+                "displaydate": str(row["Object Date"]).strip(),
+                "classification": str(row["Classification"]).strip(),
+                "medium": str(row["Medium"]).strip(),
+                "width": "",
+                "height": "",
+                "imgurl_thumb": img_url,
+                "imgurl_downsized": img_url,
+                "imgurl_full": img_url,
+            }
 
-            obj_list.append(obj)
-
-            df_save = pd.DataFrame(obj_list)
-            if df_to_be_filled.empty:
-                df_save.to_csv(self.res_csv_file_name, index=False, encoding="utf-8")
-            else:
-                df_save.to_csv(
-                    self.res_csv_file_name,
-                    mode="a",
-                    header=False,
-                    index=False,
-                    encoding="utf-8",
-                )
+            df_row = pd.DataFrame([obj])
+            write_header = df_existing.empty and count == 1
+            df_row.to_csv(
+                self.res_csv_file_name,
+                mode="w" if write_header else "a",
+                header=write_header,
+                index=False,
+                encoding="utf-8",
+            )
+            existing_ids.add(object_id)
+            time.sleep(0.1)
 
 
 if __name__ == "__main__":
     mm = MM()
+    mm.download_open_data()
     mm.filter_update_fetch_fill_csv()

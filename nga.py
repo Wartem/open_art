@@ -1,23 +1,20 @@
 # Standard library imports
-import datetime
-import glob
 import os
-import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
 from zipfile import ZipFile
 
-import pandas as pd
 # Third-party library imports
+import pandas as pd
 import requests
 import wget
-from bs4 import BeautifulSoup
 from dateutil import parser
 
 # Local imports
 from a_constants import Constants
 from csv_info import get_file_creation_date, get_month_name_from_int
+from decorators import logger_exception_only
 from open_source import Source
 
 
@@ -31,27 +28,6 @@ class NGA(Source):
 
     def unpack_and_create_csv(self):
         self.extract_zip_and_fix()
-
-    @staticmethod
-    def _get_nga_latest_remote_git_update_date():
-        # TODO: Add SSL:
-        # Ignore SSL Certificate errors
-        # ctx = ssl.create_default_context()
-        # ctx.check_hostname = False
-        # ctx.verify_mode = ssl.CERT_NONE
-
-        url = "https://github.com/NationalGalleryOfArt/opendata/commits/main"
-        data = requests.get(url)
-
-        html = BeautifulSoup(data.text, "html.parser")
-        timeline = html.find(class_="TimelineItem-body").h2.text
-        d_str = timeline.split("Commits on ")[1]
-
-        year = int(d_str[-4:])
-        month = int(Constants.months_abbreviated[d_str[0:3]])
-        day = int(d_str.split(",")[0].split(" ")[1])
-        date = datetime.datetime(year, month, day)
-        return date
 
     @staticmethod
     def get_nga_latest_remote_git_update_date():
@@ -82,6 +58,7 @@ class NGA(Source):
 
     def is_nga_file_update_needed(self):
         git_date = self.get_nga_latest_remote_git_update_date()
+        git_date = git_date.replace(hour=0, minute=0, second=0, microsecond=0)
         local_file_path = Constants.NGA_ZIP_FILE_PATH
 
         if local_file_path.exists():
@@ -121,32 +98,6 @@ class NGA(Source):
     @staticmethod
     def get_month_name_from_int(months_dict, month_number):
         return list(months_dict.keys())[list(months_dict.values()).index(month_number)]
-
-    def download_zip_if_needed(self):
-        if Constants.NGA_ZIP_FILE_PATH.exists():
-            self.is_nga_file_update_needed()
-            if input("Remove and replace the existing file? yes/no ").lower() == "yes":
-                if Constants.NGA_ZIP_FILE_PATH.exists():
-                    Constants.NGA_ZIP_FILE_PATH.unlink()
-                    print("Old file removed.")
-
-                self.download_zip(
-                    Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER)
-                )
-                if (
-                    input(
-                        f"Extract the downloaded {Constants.NGA_ZIP_FILE_NAME} "
-                        "and create/replace the database? \nyes/no "
-                    ).lower()
-                    == "yes"
-                ):
-                    self.extract_zip_and_fix()
-        else:
-            print("No file found. Downloading...")
-            self.download_zip(
-                Constants.NGA_REMOTE_DATA_ZIP, str(Constants.DOWNLOAD_FOLDER)
-            )
-            self.extract_zip_and_fix()
 
     def download_zip_if_needed(self):
         if Constants.NGA_ZIP_FILE_PATH.exists():
@@ -222,6 +173,7 @@ class NGA(Source):
 
         return df
 
+    @logger_exception_only
     def merge(self, csv1_file_name, csv2_file_name):
         # reading two csv files
         df1 = pd.read_csv(
@@ -236,7 +188,7 @@ class NGA(Source):
 
         res = pd.merge(df1, df2, on=["objectid"], how="inner")
 
-        res = self.fix_image_properties(res)  # fix_image_properties()
+        res = self.fix_image_properties(res) 
 
         res.drop("iiifurl", inplace=True, axis=1)
 
@@ -269,10 +221,7 @@ class NGA(Source):
         else:
             print("One or both of the required CSV files are missing.")
 
-    def merge(self, objects_csv_path, published_images_csv_path):
-        # Implement your merge logic here
-        pass
-
+    @logger_exception_only
     def extract_zip_and_fix(self):
         if Constants.NGA_ZIP_FILE_PATH.exists():
             print(f"Extracting from: {Constants.NGA_ZIP_FILE_PATH}")
@@ -298,38 +247,7 @@ class NGA(Source):
         else:
             print(f"Zip file not found: {Constants.NGA_ZIP_FILE_PATH}")
 
-    def _extract_zip_and_fix(self):
-        if os.path.exists(Constants.NGA_ZIP_FILE_PATH):
-            print(Constants.NGA_ZIP_FILE_PATH)
-            if os.path.exists(Constants.NGA_FOLDER_RENAME_TO):
-                shutil.rmtree(Constants.NGA_FOLDER_RENAME_TO)
-
-            with ZipFile(Constants.NGA_ZIP_FILE_PATH, "r") as zip_f:
-                zip_f.printdir()
-                print("Extract start...")
-                for file in zip_f.namelist():
-                    # Convert WindowsPath to string
-                    nga_download_starts_with = str(Constants.NGA_DOWNLOAD_STARTS_WITH)
-                    if file.startswith(nga_download_starts_with):
-                        end_part = file.split("data/")[-1]
-                        if end_part in Constants.FILES_USED:
-                            zip_f.extract(file, Constants.NGA_FOLDER_RENAME_TO)
-
-                if zip_f.namelist():
-                    # Construct the full path for the folder to be renamed
-                    old_folder_path = os.path.join(
-                        Constants.NGA_open_data_art, Constants.NGA_FOLDER_TO_RENAME
-                    )
-                    # Rename the folder
-                    if os.path.exists(old_folder_path):
-                        os.rename(old_folder_path, Constants.NGA_FOLDER_RENAME_TO)
-
-                    print("Now cleaning up the files in", Constants.NGA_CSV_CONTAINER)
-                    self.fix_nga_csv_in_folder(Constants.NGA_CSV_CONTAINER)
-                    print("Extract complete!")
-                else:
-                    print("Extract failed.")
-
+    @logger_exception_only
     def download_zip(self, data_url, download_folder):
         def bar_progress(current, total, width=80):
             progress_message = (
@@ -348,16 +266,6 @@ class NGA(Source):
         except Exception as e:
             print(f"\nAn error occurred during download: {e}")
             return None
-
-    def bar_progress(current, total, width=80):
-        progress_message = "Downloading: %d%% [%d / %d] bytes" % (
-            current / total * 100,
-            current,
-            total,
-        )
-        # Don't use print() as it will print in new line every time.
-        sys.stdout.write("\r" + progress_message)
-        sys.stdout.flush()
 
 
 if __name__ == "__main__":

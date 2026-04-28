@@ -22,18 +22,22 @@ class Art_csv:
         self.data = pd.read_csv(
             filepath, on_bad_lines="skip", index_col=False, dtype="unicode"
         )
-        # self.head = self.data.head()
         self.number_of_rows = self.data.shape[0]
         self.number_of_columns = self.data.shape[1]
-        # for column in self.data.columns:
-        #    self.columns.update({column : self.data.columns})
+
+    def resolve_column(self, name: str):
+        """Return the actual column name matching name (case-insensitive, stripped), or None."""
+        name = name.strip()
+        for col in self.data.columns:
+            if col.strip().lower() == name.lower():
+                return col
+        return None
 
     def has_column_unique_values(self, column):
-
         column_rows = self.data[column]
-        c_set_len = len(set(column_rows.items()))
+        c_set_len = column_rows.nunique()
         print("Unique values: ", c_set_len)
-        num_rows = len(list(column_rows.items()))
+        num_rows = len(column_rows)
         print("Number of rows: ", num_rows)
         if c_set_len < num_rows:
             return False
@@ -50,14 +54,16 @@ class Art_csv:
         return all_types
 
     def get_column_data(self, column_name):
-
         if not column_name:
             return self.data.columns
-        if self.has_column_unique_values(column_name):
+        resolved = self.resolve_column(column_name)
+        if resolved is None:
+            return None
+        if self.has_column_unique_values(resolved):
             print("The column has unique values.")
         else:
             print("The column does not have unique values.")
-        return self.data[column_name]
+        return self.data[resolved]
 
     def report_data_info(self):
 
@@ -111,5 +117,6 @@ class Art_csv:
         print("".join(sorted(dirty)))
         pprint("-------------------------")
 
-    if __name__ == "__main__":
-        print("Not standalone")
+
+if __name__ == "__main__":
+    print("Not standalone")

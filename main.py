@@ -1,5 +1,6 @@
 import os
 
+import logger
 from a_constants import *
 from csv_menu import csv_menu_loop
 from nga import NGA
@@ -7,10 +8,8 @@ from open_sqlite_handling import sql_injection_menu
 
 
 def init():
-    if not os.path.exists("open_data_art"):
-        os.makedirs("open_data_art")
-    if not os.path.exists("downloads"):
-        os.makedirs("downloads")
+    Constants.DOWNLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+    Constants.NGA_open_data_art.mkdir(parents=True, exist_ok=True)
 
 
 def menu():
@@ -62,6 +61,7 @@ def menu():
 
 
 def main():
+    logger.configure()
     init()
     # print_constants()
     menu()

@@ -269,9 +269,7 @@ class NGA(Source):
         else:
             print("One or both of the required CSV files are missing.")
 
-    def merge(self, objects_csv_path, published_images_csv_path):
-        # Implement your merge logic here
-        pass
+    
 
     def extract_zip_and_fix(self):
         if Constants.NGA_ZIP_FILE_PATH.exists():

@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from pathlib import Path
 
 from open_source import Source
 
@@ -69,9 +70,7 @@ class MM(Source):
 
     def filter_update_fetch_fill_csv(self):
 
-        if not os.path.exists(self.res_csv_file_name):
-            with open(self.res_csv_file_name, "w"):
-                pass
+        Path(self.res_csv_file_name).touch(exist_ok=True)
 
         df_filtered = pd.read_csv(
             self.source_org_file_name,
